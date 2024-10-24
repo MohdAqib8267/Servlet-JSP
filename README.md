@@ -8,8 +8,8 @@ A servlet is a Java program that runs on a web server and is used to handle requ
 
 Execution of Servlets basically involves Six basic steps: 
 
-- The Clients send the request to the Web Server.
-- The Web Server receives the request.
+###### 1. The Clients send the request to the Web Server.
+###### 2. The Web Server receives the request.
   
   ```
    * Now web server has web container(Apache Tomcat etc). This webcontainer contains a web.xml file (Deployment descriptor) and other servlet classes and html code.
@@ -46,8 +46,9 @@ code example:
  	</servlet-mapping>
  	
 </web-app>
-/* end code */ 
-creates request and response objects for this request
+/* end code */
+
+ creates request and response objects for this request
 calls the service method on the thread
 The public service method internally calls the protected service method
 The protected service method calls the doGet or doPost method depending on the type of request.
@@ -55,10 +56,10 @@ The doGet method generates the response and it is passed to the client.
 After sending the response, the web container deletes the request and response objects. The thread is contained in the thread pool or deleted depends on the server implementation.
   ```
       
-- The Web Server passes the request to the corresponding servlet.
-- The Servlet processes the request and generates the response in the form of output.
-- The Servlet sends the response back to the webserver.
-- The Web Server sends the response back to the client and the client browser displays it on the screen.
+###### 3.The Web Server passes the request to the corresponding servlet.
+###### 4.The Servlet processes the request and generates the response in the form of output.
+###### 5.The Servlet sends the response back to the webserver.
+###### 6.The Web Server sends the response back to the client and the client browser displays it on the screen.
 - 
 **code:**
   index.html
