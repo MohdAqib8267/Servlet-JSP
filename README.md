@@ -375,7 +375,7 @@ public class SqServlet extends HttpServlet {
 - if we want to send this data into multiple servlets, so instead of sending this data via url, use a session
 - container creates a session id for each user.The container uses this id to identify the particular user.
 - HttpSession is an interface and its implementation provides TomCat
-- genrally it is use for login & signup
+- genrally it is use for login & signup. session will be persist for multiple servlets or url(bcz use SendRedirect())
 
   AddServlet.java
   
@@ -417,6 +417,8 @@ public class SqServlet extends HttpServlet {
 				
 		HttpSession session = req.getSession();
 		int ans = (int) session.getAttribute("ans");
+
+		//session.removeAttribute("ans"); //to remove session for "ans"
 		PrintWriter out = res.getWriter();
 		out.println("Result is:"+ ans*ans);
 		
@@ -424,4 +426,52 @@ public class SqServlet extends HttpServlet {
 }
 ```
 
-** web.xml and index.html file same as above RequesDispatcher() example. **
+**web.xml and index.html file same as above RequesDispatcher() example.**
+
+**3 Cookies:** A cookie is a small piece of information that is persisted between the multiple client requests.
+
+**How Cookie works**
+
+By default, each request is considered as a new request. In cookies technique, we add cookie with response from the servlet. So cookie is stored in the cache of the browser. After that if request is sent by the user, cookie is added with request by default. Thus, we recognize the user as the old user.
+![cookie](https://github.com/user-attachments/assets/2000ba8a-54f0-4f02-9ead-e3c03b326085)
+**AddServlet.java**
+```
+public class AddServerlet extends HttpServlet {
+	
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		String num1 = req.getParameter("num1");
+    	String num2 = req.getParameter("num2");
+	
+	int ans = Integer.parseInt(num1)+Integer.parseInt(num2);
+	
+	Cookie cookie = new Cookie("ans",ans+""); //cookie is a class of Servlet
+	//to convert into string, because this constructor accept both parameters as string
+	res.addCookie(cookie);//now we have send this cookie to client in response object
+	
+	// and when user request then we have use this cookie in SqServlet 
+	
+	res.sendRedirect("sq");
+	}
+	
+}
+```
+**SqServlet.java**
+```
+public class SqServlet extends HttpServlet {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+				
+		int ans=0;
+		Cookie cookies[] = req.getCookies(); // now we will get cookies in request object and it's give all cookies in form of array
+		for(Cookie c:cookies) {
+			if(c.getName().equals("ans")) {
+				ans=Integer.parseInt(c.getValue());
+			}
+		}
+		
+		PrintWriter out = res.getWriter();
+		out.println("Result is:"+ ans*ans);
+		
+	}
+}
+```
+**web.xml and index.html file same as above RequesDispatcher() example.**
