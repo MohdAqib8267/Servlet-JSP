@@ -316,7 +316,8 @@ But in SendRedirect() method our request goes from goes from one resource(codeba
 
 **Example 1: sendRedirect with URL rewriting**
 
-AddServerlet
+AddServerlet.java
+
 ```
 package com.aqib;
 
@@ -342,6 +343,7 @@ public class AddServerlet extends HttpServlet {
 	}
 	
 }
+
 ```
 SqServlet.java
 
@@ -361,7 +363,9 @@ public class SqServlet extends HttpServlet {
 		out.println("Result is: "+ans*ans);
 	}
 }
+
 ```
+
 **web.xml and index.html file same as above RequesDispatcher() example.**
 
 **2. session** 
@@ -374,8 +378,9 @@ public class SqServlet extends HttpServlet {
 - genrally it is use for login & signup
 
   AddServlet.java
-  ```
-  package com.aqib;
+  
+```
+package com.aqib;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -401,6 +406,7 @@ public class AddServerlet extends HttpServlet {
 	res.sendRedirect("sq");
 	}
 }
+
 ```
 
 SqServlet.java
