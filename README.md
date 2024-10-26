@@ -475,3 +475,69 @@ public class SqServlet extends HttpServlet {
 }
 ```
 **web.xml and index.html file same as above RequesDispatcher() example.**
+
+# ServletConfig and ServletContext
+ServletConfig and ServletContext, both are objects created at the time of servlet initialization and used to provide some initial parameters(eg: DB url, special keys) or configuration information to the servlet. But, the difference in that information shared by ServletConfig is for a specific servlet, while information shared by ServletContext is available for all servlets in the web application.
+
+ServletConfig and ServletContext both are interfaces
+
+**ServletConfig**: ServletConfig is for a particular servlet, that means one should store servlet specific information in web.xml and retrieve them using this object.
+- Parameters of servletConfig are present as name-value pair in <init-param> inside <servlet>.
+
+eg: web.xml
+```
+	<servlet>
+ 		<servlet-name>abc</servlet-name>
+ 		<servlet-class>com.aqib.AddServerlet</servlet-class>
+ 		// this is only for AddServerlet.java
+ 		<init-param>  
+			<param-name>name</param-name>  
+			<param-value>AddServlet</param-value>  
+		</init-param> 
+ 	</servlet>
+ 	<servlet-mapping>
+ 		<servlet-name>abc</servlet-name>
+ 		<url-pattern>/add</url-pattern>
+ 	</servlet-mapping>
+```
+AddServlet.java
+```
+public class AddServerlet extends HttpServlet {
+	
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		
+		PrintWriter out = res.getWriter();
+		ServletConfig cg = getServletConfig(); // this is acceptable only for AddServlet.java as we mention in web.xml
+		out.println("Hii "+cg.getInitParameter("name"));
+	}
+	
+}
+```
+
+**ServletContext:** ServletContext is the object created by Servlet Container to share initial parameters or configuration information to the whole application.
+- Parameters of servletContext are present as name-value pair in <context-param> which is outside of <servlet> and inside <web-app>
+
+web.xml
+```
+	//available for complete app
+	<web-app>
+	 	<context-param>
+	 		<param-name>name</param-name>
+	 		<param-value>Aqib</param-value>
+	 	</context-param>
+	</web-app>
+```
+**AddServlet.java or koi b java file me use kr skte hai**
+```
+public class AddServerlet extends HttpServlet {
+	
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		
+		PrintWriter out = res.getWriter();
+
+		ServletContext ctx = getServletContext(); // this is acceptable by complete application
+		out.println("Hii "+ctx.getInitParameter("name"));
+	}
+	
+}
+```
