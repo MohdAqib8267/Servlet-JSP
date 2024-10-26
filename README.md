@@ -541,3 +541,23 @@ public class AddServerlet extends HttpServlet {
 	
 }
 ```
+# Servlet Annotation Configuration 
+
+- using servlet annotation, we don't need to maintain web.xml
+```
+@WebServlet("/add"); // using this we don't need routing in web.xml here this class will run on "/add"
+public class AddServerlet extends HttpServlet {
+	
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		
+		PrintWriter out = res.getWriter();
+		ServletConfig cg = getServletConfig(); // this is acceptable only for AddServlet.java as we mention in web.xml
+		out.println("Hii "+cg.getInitParameter("name"));
+		
+		
+		ServletContext ctx = getServletContext(); // this is acceptable by complete application
+		out.println("Hii "+ctx.getInitParameter("name"));
+	}
+	
+}
+```
