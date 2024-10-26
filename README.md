@@ -277,3 +277,33 @@ web.xml
 **Note:** prefer below link for better understanding also it include include and forward method combination.
 
 Link: https://www.javatpoint.com/requestdispatcher-in-servlet
+
+# SendRedirect in servlet
+The sendRedirect() method of HttpServletResponse interface can be used to redirect response to another resource, it may be servlet, jsp or html file.
+
+It accepts relative as well as absolute URL.
+
+It works at client side because it uses the url bar of the browser to make another request. So, it can work inside and outside the server.
+
+Note: Basically in RequestDispatcher() we have dispatch our data from one servlet to another. it is happens only server side of same code base. 
+- eg: client-->req1-->servlet1(xyz.java)--->req1--->servlet2(abc.java)--->client (servlet1 and servlet 2 will be in samecodebase and send same req,res object)
+- here url is not changed, also my request url will always show for servlet1
+
+But in SendRedirect() method our request goes from goes from one resource(codebase) to another resouce. eg: E-comm website to paypal payment gateway.
+- Main point here is that here url would be change.
+- client-->req1-->servlet1(xyz.java) of resource 1---->client--->req2--->servlet2(mno.java) of resource 2--->client
+
+  ![Screenshot 2024-10-26 142051](https://github.com/user-attachments/assets/c754e361-4d15-49d2-964f-11d440713359)
+
+  - in above image you can see that flow, and if we want to send data from one servlet to another using RequestDispatcher() we can use (req,res) objects. and here url will always show of S1.
+  - but if we want to send data from one resource to another then we need to use **session managemnet**. here url will be change for resources.
+
+### Difference between `forward()` and `sendRedirect()` Methods in Servlets
+
+| Feature                        | `forward()` Method                                                                                   | `sendRedirect()` Method                                                                 |
+|--------------------------------|------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| Execution Side                 | Works at the **server side**                                                                         | Works at the **client side**                                                             |
+| Request and Response Objects   | Forwards the **same request and response objects** to another servlet                                | **Sends a new request** each time                                                       |
+| Scope                          | Works **within the server** only                                                                    | Can be used both **within and outside the server**                                       |
+| Usage Example                  | `request.getRequestDispatcher("servlet2").forward(request, response);`                               | `response.sendRedirect("servlet2");`                                                     |
+
