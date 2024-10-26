@@ -152,6 +152,17 @@ public class AddServerlet extends HttpServlet {
 # RequestDispatcher | Calling a Servlet from another Servlet 
 The RequestDispatcher interface provides the facility of dispatching the request to another resource it may be html, servlet or jsp. This interface can also be used to include the content of another resource also. It is one of the way of servlet collaboration.
 
+RequestDispatcher(it contains two methods (i) forward (ii) include)
+
+**forward:** Forwards a request from a servlet to another resource (servlet, JSP file, or HTML file) on the server.
+![forward](https://github.com/user-attachments/assets/1208ae64-c514-475f-8442-d038fb483662)
+
+As you see in the above figure, response of second servlet is sent to the client. Response of the first servlet is not displayed to the user.
+
+**include:** Includes the content of a resource (servlet, JSP page, or HTML file) in the response.
+
+As you can see in the above figure, response of second servlet is included in the response of the first servlet that is being sent to the client.
+
 index.html
 ```
 <!DOCTYPE html>
@@ -262,3 +273,7 @@ web.xml
  	</servlet-mapping>
 </web-app>
 ```
+
+**Note:** prefer below link for better understanding also it include include and forward method combination.
+
+Link: https://www.javatpoint.com/requestdispatcher-in-servlet
