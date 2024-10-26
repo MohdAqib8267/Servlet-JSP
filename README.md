@@ -149,3 +149,116 @@ public class AddServerlet extends HttpServlet {
  	
 </web-app>
 ```
+### RequestDispatcher | Calling a Servlet from another Servlet 
+The RequestDispatcher interface provides the facility of dispatching the request to another resource it may be html, servlet or jsp. This interface can also be used to include the content of another resource also. It is one of the way of servlet collaboration.
+
+index.html
+```
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="add" method="get">
+		Enter first number: <input type="text" name="num1" /><br/>
+		Enter second number: <input type="text" name="num2" /><br/>
+		<input type="submit" />
+		
+		<!--after hitting submit button, my url changes to "http://localhost:8080/DemoApp/add?num1=1&num2=1" -->
+		<!-- by default it uses get method -->
+		<!-- if i don't want to send this query params(?num1=1&num2=1), we can use post method. and rest all same, then this query params will not show-->
+		
+	</form>
+</body>
+</html>
+```
+
+AddServlet.java
+```
+package com.aqib;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class AddServerlet extends HttpServlet {
+	
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		String num1 = req.getParameter("num1");
+        String num2 = req.getParameter("num2");
+		
+		int ans = Integer.parseInt(num1)+Integer.parseInt(num2);
+		
+		
+		//for dispatching request from one servlet to another we have 2 methods
+		//1. RequestDispatcher(it contains two methods (i) forward (ii) include
+		
+		//also we can pass data in the req obj
+		req.setAttribute("ans", ans);
+		RequestDispatcher rd = req.getRequestDispatcher("sq"); // we have give path "Sq"
+		rd.forward(req, res);
+		
+		PrintWriter out = res.getWriter(); //PrintWriter class is used to send character text to the client (typically a web browser).
+		//res.getWriter(); provides an output stream
+		out.println("Sum is: "+ans);
+	}
+	
+}
+```
+
+SqServlet.java
+```
+package com.aqib;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+
+public class SqServlet extends HttpServlet {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		
+		int ans = (int) req.getAttribute("ans"); // convert into int bcz return an object
+		PrintWriter out = res.getWriter();
+		out.println("Result is: "+ans*ans);
+	}
+}
+```
+
+web.xml
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>DemoApp</display-name>
+  
+ 
+ 	<servlet>
+ 		<servlet-name>abc</servlet-name>
+ 		<servlet-class>com.aqib.AddServerlet</servlet-class>
+ 	</servlet>
+ 	<servlet-mapping>
+ 		<servlet-name>abc</servlet-name>
+ 		<url-pattern>/add</url-pattern>
+ 	</servlet-mapping>
+ 	
+ 	 	<servlet>
+ 		<servlet-name>pqr</servlet-name>
+ 		<servlet-class>com.aqib.SqServlet</servlet-class>
+ 	</servlet>
+ 	<servlet-mapping>
+ 		<servlet-name>pqr</servlet-name>
+ 		<url-pattern>/sq</url-pattern>
+ 	</servlet-mapping>
+</web-app>
+```
