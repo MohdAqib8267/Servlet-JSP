@@ -307,3 +307,115 @@ But in SendRedirect() method our request goes from goes from one resource(codeba
 | Scope                          | Works **within the server** only                                                                    | Can be used both **within and outside the server**                                       |
 | Usage Example                  | `request.getRequestDispatcher("servlet2").forward(request, response);`                               | `response.sendRedirect("servlet2");`                                                     |
 
+**Session Tracking:** Session Tracking is a way to maintain state (data) of an user. It is also known as session management in servlet.
+- we have use session tracking with sendRedirect(), when we need to pass data from one servlet to another
+- There are 3 methods of session management
+- 1. URL rewriting
+  2. session
+  3. cookie
+
+**Example 1: sendRedirect with URL rewriting**
+
+AddServerlet
+```
+package com.aqib;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class AddServerlet extends HttpServlet {
+	
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		String num1 = req.getParameter("num1");
+        	String num2 = req.getParameter("num2");
+		
+		int ans = Integer.parseInt(num1)+Integer.parseInt(num2);
+
+		res.sendRedirect("sq?ans="+ans);  // it will change our url
+		// in this example we have use redirection with url rewriting 
+	}
+	
+}
+```
+SqServlet.java
+
+```
+package com.aqib;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class SqServlet extends HttpServlet {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+				
+		int ans = Integer.parseInt(req.getParameter("ans"));
+		PrintWriter out = res.getWriter(); 
+		out.println("Result is: "+ans*ans);
+	}
+}
+```
+**web.xml and index.html file same as above RequesDispatcher() example.**
+
+**2. session** 
+
+2 Http session
+
+- if we want to send this data into multiple servlets, so instead of sending this data via url, use a session
+- container creates a session id for each user.The container uses this id to identify the particular user.
+- HttpSession is an interface and its implementation provides TomCat
+- genrally it is use for login & signup
+
+  AddServlet.java
+  ```
+  package com.aqib;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class AddServerlet extends HttpServlet {
+	
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		String num1 = req.getParameter("num1");
+    	String num2 = req.getParameter("num2");
+	
+	int ans = Integer.parseInt(num1)+Integer.parseInt(num2);
+	
+	HttpSession session = req.getSession(); //req.getSession() Returns the current session associated with this request,or if the request does not have a session, creates one.
+	
+	session.setAttribute("ans", ans);
+	res.sendRedirect("sq");
+	}
+}
+```
+
+SqServlet.java
+
+```
+public class SqServlet extends HttpServlet {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+				
+		HttpSession session = req.getSession();
+		int ans = (int) session.getAttribute("ans");
+		PrintWriter out = res.getWriter();
+		out.println("Result is:"+ ans*ans);
+		
+	}
+}
+```
+
+** web.xml and index.html file same as above RequesDispatcher() example. **
