@@ -571,3 +571,8 @@ JSP allows embedding Java code in HTML pages, making it easier to build interact
 
 ## How JSP Translated into Servlets ?
 ![Screenshot 2024-10-29 015511](https://github.com/user-attachments/assets/f787cb0f-67d4-456c-9eb4-2ab0779b0267)
+
+- **scriptlet tag (<% service method inside this, and it's provide by default all objects like HttpServletRequest in form of request %>)**
+- **Declaration tag (<%! all declared variables etc, that are present on outside service method and used inside servide method %>)** like declre variable whose are not in service
+- **Expression tag(<%= expression %>)**  an expression tag is used to evaluate a Java expression and convert the result into a string, which is then inserted into the output of the JSP page. This is a convenient way to embed dynamic content directly within the HTML structure of a JSP file.
+- **Declarative tag(<%page import="java.util.*","java.util.Date" %>)** used for import libraries and other stuff;
