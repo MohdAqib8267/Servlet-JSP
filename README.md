@@ -561,3 +561,13 @@ public class AddServerlet extends HttpServlet {
 	
 }
 ```
+
+# JSP
+
+## What and Why?
+In Java, JSP stands for Jakarta Server Pages( (JSP; formerly JavaServer Pages)). It is a server-side technology that is used for creating web applications. It is used to create dynamic web content. JSP consists of both HTML tags and JSP tags. **In this, JSP tags are used to insert JAVA code into HTML pages.** It is an advanced version of Servlet Technology i.e. a web-based technology that helps us to create dynamic and platform-independent web pages. In this, Java code can be inserted in HTML/ XML pages or both. **JSP is first converted into a servlet by the JSP container before processing the client’s request.** JSP has various features like JSP Expressions, JSP tags, JSP Expression Language, etc.
+
+JSP allows embedding Java code in HTML pages, making it easier to build interactive web applications.
+
+## How JSP Translated into Servlets ?
+![Screenshot 2024-10-29 015511](https://github.com/user-attachments/assets/f787cb0f-67d4-456c-9eb4-2ab0779b0267)
