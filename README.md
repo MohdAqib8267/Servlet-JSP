@@ -706,8 +706,66 @@ if you want to use external tag library.
   
 <%@ taglib uri="http://www.javatpoint.com/tags" prefix="mytag" %>  
   
-<mytag:currentDate/>  
+<mytag:currentDate/>   //means this currentDate tag belongs to mytag, which url is given
   
 </body>  
+</html>
+```
+
+### . Implicit Object in JSP or (built-in objects gives JSP) and can be used in Scriptlet and Expression tag
+
+- **request** (HttpServletRequest)
+- **response** (HttpServletResponse)
+- **pageContext** (PageContext) : basically here we can set context for page
+```
+pageContext.setAttribute("name", "aqib",pageContext.SESSION_SCOPE); // by default it scopes in same page and we can get using getAttribute
+		//but we can change the scope of its using third parameter, like here we hane change scope to session scope
+```
+now getting in another page by session
+```
+ <%  String name = (String) pageContext.getAttribute("User", PageContext.SESSION_SCOPE); out.print("Hey!!!" + name); %>
+```
+- **session** (HttpSession)
+- **out** (JspWriter) ~ PrintWriter object
+- **application** (ServletContext ) : provide context for complete app
+- **config** (ServletConfig) : Provide context only specified page like we have seen in web.xml
+
+### Exception Handling in JSP:
+In java, we can handle exception by using try-catch. here also we can use it. but the best thing is we have used given Conventions. follow below examples
+> we have created an error.jsp file and when any exception is error then error.jsp page will handle it
+
+index.jsp
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8" errorPage="error.jsp"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<%
+	 int k=9/0; // it will give unchecked exception and it call to error.jsp page to handle this exception
+	%>
+</body>
+</html>
+```
+error.jsp
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" isErrorPage="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body bgcolor="red">
+
+<h1>Error:</h1><%= exception %>
+
+</body>
 </html>
 ```
