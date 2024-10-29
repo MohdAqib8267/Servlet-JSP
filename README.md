@@ -769,3 +769,43 @@ error.jsp
 </body>
 </html>
 ```
+## Connection of JSP with JDBC
+**Important:** here connection jar file should be copy into **webapp>WEB-INF>lib**.(lib me jana chahye)
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+	<%@ page import="java.sql.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body> 
+
+	<%
+	 	String url = "jdbc:mysql://localhost:3306/trainTicketBooking";
+		String user = "root";
+		String password="Aqib8267@";
+		
+		String query = "select * from user where id=1";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection conn = DriverManager.getConnection(url,user,password);
+		Statement st = conn.createStatement();
+		ResultSet rs = st.executeQuery(query);
+		rs.next();
+	%>
+	Name:<%= rs.getString("name") %> <br/>
+	Email:<%= rs.getString("email") %>
+	<%
+		rs.close();  
+		st.close();
+		
+	%>
+</body>
+</html>
+```
+## MVC Architecture:
+![Screenshot 2024-10-30 013226](https://github.com/user-attachments/assets/28e5cbae-55b3-4457-899c-8310437869cf)
+
+![Screenshot 2024-10-30 013146](https://github.com/user-attachments/assets/29ff0544-6ff9-495e-9543-907f7f5fb029)
