@@ -689,3 +689,25 @@ The exception is: <%= exception %>
 </body>  
 </html>
 ```
+### Jsp Include Directive
+Basically it is used to include another pages or resources in current page.
+```
+<%@ include file file="header.html" %>
+```
+### JSP Taglib directive
+if you want to use external tag library.
+**Syntax JSP Taglib directive**
+```
+<%@ taglib uri="uriofthetaglibrary" prefix="prefixoftaglibrary" %>
+```
+```
+<html>  
+<body>  
+  
+<%@ taglib uri="http://www.javatpoint.com/tags" prefix="mytag" %>  
+  
+<mytag:currentDate/>  
+  
+</body>  
+</html>
+```
