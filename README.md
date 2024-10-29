@@ -576,3 +576,31 @@ JSP allows embedding Java code in HTML pages, making it easier to build interact
 - **Declaration tag (<%! all declared variables etc, that are present on outside service method and used inside servide method %>)** like declre variable whose are not in service
 - **Expression tag(<%= expression %>)**  an expression tag is used to evaluate a Java expression and convert the result into a string, which is then inserted into the output of the JSP page. This is a convenient way to embed dynamic content directly within the HTML structure of a JSP file.
 - **Declarative tag(<%page import="java.util.*","java.util.Date" %>)** used for import libraries and other stuff;
+
+**Example:**
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<%@page import="java.util.*"%> <!-- This is an Directive tag, used to import etc -->
+	<h1 style="font-size: 3rem; background-color: red;">hello world</h1>
+
+	<%! int global = 5; // this is a Declaration tag (outside and above service method) %>
+
+	<%
+		int i=3;
+		out.println(i+4); //this is a scriptlet tag, (or it is service method)
+		out.println(global+i);
+		
+	%>
+	<br /> The value of Global variable is:<%= global %> and this is an example of <b>Expression tag</b>
+</body>
+</html>
+```
