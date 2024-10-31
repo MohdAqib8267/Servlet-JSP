@@ -939,3 +939,194 @@ public class Student {
 </body>
 </html>
 ```
+### Function tag library
+
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+	
+<!DOCTYPE html>  
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body> 
+	
+	<c:set var="str" value="My Name is Aquib"></c:set>
+	Length of String: <c:out value="${fn:length(str) }"></c:out>
+	
+	<div style="background-color:red; padding:3rem;">
+	<c:forEach var="s" items="${fn:split(str,' ')}">
+		<c:out value="${s}"></c:out> <br>
+	</c:forEach>
+	</div>
+	
+	<c:if test="${fn:contains(str,'Aquib') }">
+		yes present
+	</c:if>
+	
+</body>
+</html>
+```
+
+## Java Servlet Filters
+
+Servlet Filters are pluggable Java components that we can used to intercept the client request and do some pre-processing. It can also intercept the response and do post-processing before sending to the client in web application. 
+
+![Screenshot 2024-10-31 184721](https://github.com/user-attachments/assets/1cbcf283-8d82-4145-9c82-d23ca22a6f7a)
+
+For creating any filter, you must implement the Filter interface. Filter interface provides the life cycle methods for a filter.
+
+### Filter Interface Methods
+
+| Method                                      | Description                                                                                                                     |
+|---------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| `public void init(FilterConfig config)`     | The `init()` method is invoked only once. It is used to initialize the filter.                                                 |
+| `public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)` | The `doFilter()` method is invoked every time a user requests a resource to which the filter is mapped. It is used to perform filtering tasks. |
+| `public void destroy()`                     | The `destroy()` method is invoked only once when the filter is taken out of service.                                           |
+
+### 2) FilterChain interface
+The object of FilterChain is responsible to invoke the next filter or resource in the chain.This object is passed in the doFilter method of Filter interface.The FilterChain interface contains only one method:
+
+public void doFilter(ServletRequest request, ServletResponse response): it passes the control to the next filter or resource.
+
+### we can define filter mapping in web.xml or just using annotation
+> using web.xml
+```
+<web-app>  
+  
+<filter>  
+<filter-name>...</filter-name>  
+<filter-class>...</filter-class>  
+</filter>  
+   
+<filter-mapping>  
+<filter-name>...</filter-name>  
+<url-pattern>...</url-pattern>  
+</filter-mapping>  
+  
+</web-app>
+```
+> using annotation
+```
+@WebFilter("/add")
+```
+
+Example-> NewFile.jsp
+
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+	
+<!DOCTYPE html>  
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body> 
+	<form method="get" action="add">
+	Enter your ID:<input type="text" name="id"> <br>
+	Enter your name:<input type="text" name="name">
+	<input type="submit">   
+	</form>
+</body>
+</html>
+```
+> AddServlet.java
+```
+package com.aqib;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/add")
+
+public class AddServlet extends HttpServlet{
+	public void service(HttpServletRequest req,HttpServletResponse res) throws ServletException, IOException {
+		
+		int id = Integer.parseInt(req.getParameter("id"));
+		String name = req.getParameter("name");
+		
+		
+		PrintWriter out = res.getWriter();
+		out.println("Hello "+name);
+	}
+}
+```
+> IdFilter.java
+```
+package com.aqib;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpFilter;
+import javax.servlet.http.HttpServletRequest;
+
+
+@WebFilter("/add")
+public class IdFilter extends HttpFilter implements Filter {
+       
+   
+    public IdFilter() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see Filter#destroy()
+	 */
+	public void destroy() {
+		// TODO Auto-generated method stub
+	}
+
+	
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		PrintWriter out = response.getWriter();
+		HttpServletRequest req = (HttpServletRequest) request;
+		
+	
+		int id = Integer.parseInt(req.getParameter("id"));
+		System.out.println("In filter");
+		if(id>0) {
+			chain.doFilter(request, response); 
+		} 
+		else {
+			out.println("Invalid ID.");
+		}
+		
+	}
+
+	/**
+	 * @see Filter#init(FilterConfig)
+	 */
+	public void init(FilterConfig fConfig) throws ServletException {
+		// TODO Auto-generated method stub
+	}
+
+}
+```
