@@ -809,3 +809,105 @@ error.jsp
 ![Screenshot 2024-10-30 013226](https://github.com/user-attachments/assets/28e5cbae-55b3-4457-899c-8310437869cf)
 
 ![Screenshot 2024-10-30 013146](https://github.com/user-attachments/assets/29ff0544-6ff9-495e-9543-907f7f5fb029)
+
+
+# JSTL (Java serverpage tag library)
+
+**Core tag library**
+
+> AddServlet.java
+```
+package com.aqib;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/add")
+
+public class AddServlet extends HttpServlet{
+	public void service(HttpServletRequest req,HttpServletResponse res) throws ServletException, IOException {
+		
+		String name = "Aqib";
+		
+		List<Student>st = new ArrayList<>();
+		st.add(new Student(1,"Aqib")); st.add(new Student(2,"Kashif"));
+		
+		
+		req.setAttribute("list", st);
+		RequestDispatcher rd = req.getRequestDispatcher("NewFile.jsp");
+		rd.forward(req, res);
+	}
+}
+```
+> NewFile.jsp
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	
+<!DOCTYPE html>  
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body> 
+	Hello
+	<%
+		// 1st method to get servlet data
+		//String name = request.getAttribute("label").toString(); 
+		//out.println(name);
+	%> 
+	<br>
+	<!-- 2nd method -->
+	${list}
+	 
+	<br/>   
+	<!-- using JSTL core library -->
+	<c:forEach items="${list}" var="s">
+		${s.getName()} <br/>
+	</c:forEach>
+</body>
+</html>
+```
+```
+> Student.java
+```
+package com.aqib;
+
+public class Student {
+	int rollno;
+	String name;
+	public Student(int rollno, String name) {
+		super();
+		this.rollno = rollno;
+		this.name = name;
+	}
+	public int getRollno() {
+		return rollno;
+	}
+	public void setRollno(int rollno) {
+		this.rollno = rollno;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	@Override
+	public String toString() { 
+		return "Student [rollno=" + rollno + ", name=" + name + "]";
+	}
+	
+}
+```
